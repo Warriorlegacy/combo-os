@@ -131,3 +131,4 @@ Reach out to local businesses (clinics, law firms, real estate agencies, e-comme
 ### 5. Truth-in-Output (The Anti-Slop Guarantee)
 * Modern buyers hate generic AI "slop" (overused purple gradients, robotic buzzwords like "unleash" and "delve", fake metrics).
 * Combo OS follows **The Unslop Playbook**: tactile typography, warm paper-and-ink aesthetics, verifiable citations, and zero fabrication. It feels like software crafted by senior human engineers.
+

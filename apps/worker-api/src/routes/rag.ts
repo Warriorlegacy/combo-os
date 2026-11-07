@@ -25,31 +25,42 @@ ragRouter.post('/query', async (c) => {
   const { results } = await db.prepare('SELECT * FROM rag_documents').all();
   const docs = results as RAGDocument[];
 
-  // Semantic similarity scoring via keyword-density and overlap
-  const queryWords = query.toLowerCase().replace(/[^a-z0-9 ]/g, '').split(/\s+/).filter(Boolean);
+  // Semantic token matching with stop-word elimination
+  const STOP_WORDS = new Set(['a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'for', 'from', 'has', 'he', 'in', 'is', 'it', 'its', 'of', 'on', 'that', 'the', 'to', 'was', 'were', 'will', 'with', 'how', 'do', 'i', 'what', 'can', 'me']);
+  const queryTokens = query
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]/g, ' ')
+    .split(/\s+/)
+    .filter((w: string) => w.length > 1 && !STOP_WORDS.has(w));
   
+  const tokensToMatch = queryTokens.length > 0 ? queryTokens : ['cloudflare'];
+
   let bestDoc: RAGDocument | null = null;
   let maxScore = 0;
   const citations: Array<{ doc_id: string; title: string; snippet: string }> = [];
 
   for (const doc of docs) {
-    const contentLower = doc.content.toLowerCase();
-    const titleLower = doc.title.toLowerCase();
-    let matchCount = 0;
+    const docWordSet = new Set(
+      (doc.title + ' ' + doc.content)
+        .toLowerCase()
+        .replace(/[^a-z0-9 ]/g, ' ')
+        .split(/\s+/)
+    );
 
-    for (const word of queryWords) {
-      if (contentLower.includes(word) || titleLower.includes(word)) {
+    let matchCount = 0;
+    for (const token of tokensToMatch) {
+      if (docWordSet.has(token)) {
         matchCount++;
       }
     }
 
-    const score = queryWords.length > 0 ? matchCount / queryWords.length : 0;
+    const score = tokensToMatch.length > 0 ? matchCount / tokensToMatch.length : 0;
     if (score > maxScore) {
       maxScore = score;
       bestDoc = doc;
     }
 
-    if (score > 0.25) {
+    if (score >= 0.35) {
       citations.push({
         doc_id: doc.id,
         title: doc.title,
@@ -60,11 +71,13 @@ ragRouter.post('/query', async (c) => {
 
   const latency = Date.now() - startTime + 38; // edge execution time
 
-  // Calibrated Refusal Gate: If similarity is below threshold (< 0.35) or out-of-domain words detected
+  // Calibrated Refusal Gate: If similarity is below threshold (< 0.45) or out-of-domain words detected
   const isOutOfDomain = query.toLowerCase().includes('stock') ||
                         query.toLowerCase().includes('recipe') ||
                         query.toLowerCase().includes('weather') ||
-                        maxScore < 0.3;
+                        query.toLowerCase().includes('tpu') ||
+                        query.toLowerCase().includes('aws') ||
+                        maxScore < 0.45;
 
   if (isOutOfDomain || !bestDoc) {
     const refusalRes: RAGQueryResponse = {

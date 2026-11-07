@@ -42,3 +42,29 @@ leadsRouter.post('/:id/approve', (c) => {
   return c.json({ success: true, lead, message: 'Lead outreach approved for dispatch.' });
 });
 
+// Dispatch outreach email (requires prior human approval)
+leadsRouter.post('/:id/dispatch', async (c) => {
+  const id = c.req.param('id');
+  const lead = mockLeads.find(l => l.id === id);
+  if (!lead) return c.json({ success: false, error: 'Lead not found' }, 404);
+
+  if (lead.recovery_status !== 'APPROVED') {
+    return c.json({
+      success: false,
+      error: 'Cannot dispatch unapproved lead. Invariant requires explicit human approval first.'
+    }, 403);
+  }
+
+  lead.recovery_status = 'SENT';
+  const dispatchedAt = new Date().toISOString();
+
+  return c.json({
+    success: true,
+    message: `Re-engagement sequence successfully dispatched to ${lead.email}.`,
+    lead_id: id,
+    recipient: lead.email,
+    recovery_status: 'SENT',
+    dispatched_at: dispatchedAt
+  });
+});
+

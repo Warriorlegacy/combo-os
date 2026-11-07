@@ -116,4 +116,15 @@ app.onError((err, c) => {
   }, 500);
 });
 
+// Composite Cloudflare Worker Handler supporting fetch & scheduled cron triggers
+const handler = {
+  fetch: (req: Request, env?: any, ctx?: any) => app.fetch(req, env, ctx),
+  async scheduled(event: { cron: string; scheduledTime: number }, env: any, ctx: any) {
+    console.log(`[Scheduled Cron] Triggered: ${event.cron} at ${new Date(event.scheduledTime).toISOString()}`);
+  }
+};
+
+// Also attach scheduled to app directly for backwards compatibility
+(app as any).scheduled = handler.scheduled;
+
 export default app;

@@ -46,3 +46,17 @@ freelancerRouter.post('/invoices', async (c) => {
   return c.json({ success: true, invoice: newInvoice }, 201);
 });
 
+freelancerRouter.post('/invoices/:id/send', async (c) => {
+  const id = c.req.param('id');
+  const invoice = mockInvoices.find(inv => inv.id === id);
+  if (!invoice) return c.json({ success: false, error: 'Invoice not found' }, 404);
+
+  invoice.status = 'SENT';
+  return c.json({
+    success: true,
+    message: `Invoice ${id} dispatched to ${invoice.client_name}.`,
+    invoice,
+    portal_link: `https://combo-hub.pages.dev/freelancer-os?inv=${id}`
+  });
+});
+
