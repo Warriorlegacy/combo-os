@@ -1,11 +1,11 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
-import { directoryRouter } from './routes/directory.js';
-import { gtmRouter } from './routes/gtm.js';
-import { ragRouter } from './routes/rag.js';
-import { gatewayRouter } from './routes/gateway.js';
-import { getDatabase } from './db/db-client.js';
-import { SystemStatus } from '@combo/shared-types';
+import { directoryRouter } from './routes/directory.ts';
+import { gtmRouter } from './routes/gtm.ts';
+import { ragRouter } from './routes/rag.ts';
+import { gatewayRouter } from './routes/gateway.ts';
+import { getDatabase } from './db/db-client.ts';
+import type { SystemStatus } from '@combo/shared-types';
 
 const app = new Hono<{ Bindings: { COMBO_DB?: any; COMBO_BUCKET?: any; AI?: any } }>();
 

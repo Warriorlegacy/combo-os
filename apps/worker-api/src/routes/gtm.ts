@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
-import { getDatabase } from '../db/db-client.js';
-import { ApprovalStatus } from '@combo/shared-types';
+import { getDatabase } from '../db/db-client.ts';
+import type { ApprovalStatus } from '@combo/shared-types';
 
 export const gtmRouter = new Hono<{ Bindings: { COMBO_DB?: any } }>();
 

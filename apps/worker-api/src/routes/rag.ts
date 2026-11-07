@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
-import { getDatabase } from '../db/db-client.js';
-import { RAGDocument, RAGEvalBenchmark, RAGQueryResponse } from '@combo/shared-types';
+import { getDatabase } from '../db/db-client.ts';
+import type { RAGDocument, RAGEvalBenchmark, RAGQueryResponse } from '@combo/shared-types';
 
 export const ragRouter = new Hono<{ Bindings: { COMBO_DB?: any } }>();
 

@@ -1,4 +1,4 @@
-import { seedTools, seedTopics, seedDrafts, seedDocuments, seedEvalBenchmarks } from './seed-data.js';
+import { seedTools, seedTopics, seedDrafts, seedDocuments, seedEvalBenchmarks } from './seed-data.ts';
 
 export interface D1DatabaseLike {
   prepare(query: string): {

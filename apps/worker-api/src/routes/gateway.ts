@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
-import { LLMGatewayService } from '../services/llm-gateway.js';
-import { getDatabase } from '../db/db-client.js';
-import { GatewayRequest } from '@combo/shared-types';
+import { LLMGatewayService } from '../services/llm-gateway.ts';
+import { getDatabase } from '../db/db-client.ts';
+import type { GatewayRequest } from '@combo/shared-types';
 
 export const gatewayRouter = new Hono<{ Bindings: { COMBO_DB?: any; AI?: any; GROQ_API_KEY?: string; GEMINI_API_KEY?: string } }>();
 

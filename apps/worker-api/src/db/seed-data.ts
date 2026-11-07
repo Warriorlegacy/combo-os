@@ -1,4 +1,4 @@
-import { DirectoryTool, GTMTopic, GTMDraft, RAGDocument, RAGEvalBenchmark } from '@combo/shared-types';
+import type { DirectoryTool, GTMTopic, GTMDraft, RAGDocument, RAGEvalBenchmark } from '@combo/shared-types';
 
 export const seedTools: DirectoryTool[] = [
   // --- Infrastructure Core ($0 Stack) ---

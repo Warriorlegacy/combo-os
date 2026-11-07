@@ -1,4 +1,4 @@
-import { GatewayRequest, GatewayResponse } from '@combo/shared-types';
+import type { GatewayRequest, GatewayResponse } from '@combo/shared-types';
 
 export interface EnvWithAI {
   AI?: {
@@ -9,7 +9,10 @@ export interface EnvWithAI {
 }
 
 export class LLMGatewayService {
-  constructor(private env?: EnvWithAI) {}
+  private env?: EnvWithAI;
+  constructor(env?: EnvWithAI) {
+    this.env = env;
+  }
 
   async complete(req: GatewayRequest): Promise<GatewayResponse> {
     const startTime = Date.now();

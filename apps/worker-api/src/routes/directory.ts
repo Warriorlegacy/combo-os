@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { getDatabase } from '../db/db-client.js';
+import { getDatabase } from '../db/db-client.ts';
 
 export const directoryRouter = new Hono<{ Bindings: { COMBO_DB?: any } }>();
 
