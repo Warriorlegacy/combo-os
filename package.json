@@ -1,0 +1,31 @@
+{
+  "name": "combo-os",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Unified Cloudflare Free-Stack Hub, Developer Directory, and AI Production Suite",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:hub": "npm --workspace=apps/hub run dev",
+    "dev:api": "npm --workspace=apps/worker-api run dev",
+    "build:hub": "npm --workspace=apps/hub run build",
+    "build:api": "npm --workspace=apps/worker-api run build",
+    "build": "node scripts/build-all.mjs",
+    "test:edge": "node scripts/test-edge.mjs",
+    "test": "npm run test:edge"
+  },
+  "keywords": [
+    "cloudflare-pages",
+    "cloudflare-workers",
+    "cloudflare-d1",
+    "cloudflare-r2",
+    "workers-ai",
+    "groq",
+    "gemini",
+    "unslop"
+  ],
+  "author": "Piyush Raj Singh <contact@signhify.com>",
+  "license": "MIT"
+}
