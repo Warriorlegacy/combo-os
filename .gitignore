@@ -1,5 +1,8 @@
 node_modules/
 .next/
+apps/hub/.next/
+out/
+apps/hub/out/
 dist/
 build/
 .wrangler/
