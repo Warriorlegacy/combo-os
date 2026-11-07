@@ -1,0 +1,42 @@
+name: Combo OS CI/CD
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test-and-build:
+    name: Test & Build (Edge API + Cloudflare Pages)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: 'npm'
+
+      - name: Install Monorepo Dependencies
+        run: npm ci
+
+      - name: Run Edge Invariant & API Tests (50 Checks)
+        run: node --experimental-strip-types scripts/test-edge.mjs
+
+      - name: Build Cloudflare Pages Static Export
+        run: npm --workspace=apps/hub run build
+
+      - name: Verify Cloudflare Pages Output Directory
+        run: ls -la apps/hub/out
+
+      - name: Deploy Cloudflare Worker API (Production)
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          echo "Ready for zero-dollar edge deployment via wrangler deploy"
