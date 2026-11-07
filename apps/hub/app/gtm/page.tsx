@@ -265,9 +265,21 @@ export default function GTMPage() {
                   </div>
                 )}
 
-                {draft.approval_status === 'APPROVED' && draft.scheduled_for && (
-                  <div className="text-[11px] font-mono text-[#7a8074] dark:text-[#828a7d]">
-                    Scheduled for publication: {new Date(draft.scheduled_for).toLocaleString()}
+                {draft.approval_status === 'APPROVED' && (
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-[#dddccd] dark:border-[#31362d]">
+                    <div className="text-[11px] font-mono text-[#7a8074] dark:text-[#828a7d]">
+                      Scheduled for publication: {draft.scheduled_for ? new Date(draft.scheduled_for).toLocaleString() : 'Ready for dispatch'}
+                    </div>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(draft.content);
+                        alert('Copied approved post content to clipboard!');
+                      }}
+                      className="inline-flex items-center px-3 py-1.5 rounded bg-[#1c1f1a] text-[#fffef9] dark:bg-[#e8eae3] dark:text-[#111410] font-sans text-xs font-semibold hover:opacity-90 transition-opacity"
+                    >
+                      <Send className="w-3 h-3 mr-1.5" />
+                      <span>Copy to Publish</span>
+                    </button>
                   </div>
                 )}
 

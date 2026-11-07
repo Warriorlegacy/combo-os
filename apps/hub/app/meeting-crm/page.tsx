@@ -272,6 +272,58 @@ export default function MeetingCRMPage() {
                 );
               })}
             </div>
+
+            {/* Quick Action Item Form */}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const form = e.target as HTMLFormElement;
+                const taskInput = form.elements.namedItem('task') as HTMLInputElement;
+                const assigneeInput = form.elements.namedItem('assignee') as HTMLInputElement;
+                const dateInput = form.elements.namedItem('due_date') as HTMLInputElement;
+                if (!taskInput.value.trim()) return;
+
+                const newItem = {
+                  id: `act-${Date.now()}`,
+                  task: taskInput.value.trim(),
+                  assignee: assigneeInput.value.trim() || 'Piyush',
+                  due_date: dateInput.value || new Date(Date.now() + 86400000 * 3).toISOString().split('T')[0],
+                  completed: false
+                };
+
+                setMeeting(prev => ({
+                  ...prev,
+                  action_items: [...prev.action_items, newItem]
+                }));
+                form.reset();
+              }}
+              className="pt-2 flex flex-col sm:flex-row gap-2 text-xs"
+            >
+              <input
+                type="text"
+                name="task"
+                placeholder="New action item description..."
+                required
+                className="flex-1 p-2 rounded border border-[#dddccd] dark:border-[#31362d] bg-[#f7f6f1] dark:bg-[#1f231d]"
+              />
+              <input
+                type="text"
+                name="assignee"
+                placeholder="Assignee (e.g. Piyush)"
+                className="w-28 p-2 rounded border border-[#dddccd] dark:border-[#31362d] bg-[#f7f6f1] dark:bg-[#1f231d]"
+              />
+              <input
+                type="date"
+                name="due_date"
+                className="w-32 p-2 rounded border border-[#dddccd] dark:border-[#31362d] bg-[#f7f6f1] dark:bg-[#1f231d] font-mono"
+              />
+              <button
+                type="submit"
+                className="px-3 py-2 rounded bg-[#17603a] text-white dark:bg-[#6fce96] dark:text-[#111410] font-semibold hover:opacity-90"
+              >
+                + Add Item
+              </button>
+            </form>
           </div>
         </div>
       </div>

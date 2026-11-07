@@ -250,11 +250,38 @@ export default function ShowroomPage() {
           <div className="p-5 rounded-lg bg-[#fffef9] dark:bg-[#181b16] border border-[#dddccd] dark:border-[#31362d] space-y-3">
             <div className="font-serif font-bold text-base">Request Commercial Spec Sheet</div>
             {submitted ? (
-              <div className="p-4 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-300 text-xs space-y-1">
+              <div className="p-4 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-300 text-xs space-y-2">
                 <div className="font-bold flex items-center">
                   <CheckCircle2 className="w-4 h-4 mr-1.5" /> Quote Spec Requested!
                 </div>
-                <p>Saved to Cloudflare D1. Complete architectural specification packet sent.</p>
+                <p>Saved to Cloudflare D1. Complete architectural specification packet prepared.</p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const specText = `SIGNHIFY KINETIC 3D PRODUCT CONFIGURATION SPEC SHEET\n` +
+                      `Date: ${new Date().toISOString()}\n` +
+                      `Product: Signhify Kinetic Ergonomic Chair\n` +
+                      `Selected Finish: ${activeFinish.name} (${activeFinish.colorHex})\n` +
+                      `Material Properties: Roughness ${activeFinish.roughness}, Metalness ${activeFinish.metalness}\n` +
+                      `Base Price: $599.00\n` +
+                      `Finish Upgrade: +$${activeFinish.priceDelta}.00\n` +
+                      `Total Unit Cost: $${totalPrice}.00\n` +
+                      `Dimensions: 68 cm W x 112-124 cm H x 64 cm D\n` +
+                      `Lead Time: 5-7 Business Days\n` +
+                      `Certified Architecture: Cloudflare Pages & Workers ($0 Edge Compute)\n` +
+                      `Quote Reference ID: Q-${Date.now()}\n`;
+                    const blob = new Blob([specText], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `Signhify-Spec-Sheet-${activeFinish.id}.txt`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                  }}
+                  className="w-full mt-2 py-1.5 px-3 rounded bg-[#17603a] text-white dark:bg-[#6fce96] dark:text-[#111410] font-sans font-semibold text-center hover:opacity-90 transition-opacity"
+                >
+                  Download Commercial Spec Sheet (.txt)
+                </button>
               </div>
             ) : (
               <form onSubmit={handleEnquiry} className="space-y-3 text-xs">

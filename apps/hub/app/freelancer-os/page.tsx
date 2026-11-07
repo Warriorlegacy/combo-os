@@ -334,7 +334,21 @@ export default function FreelancerOSPage() {
               </div>
             </div>
 
-            <div className="flex justify-end pt-2">
+            <div className="flex justify-end space-x-2 pt-2">
+              <button
+                onClick={async () => {
+                  const workerBase = process.env.NEXT_PUBLIC_API_URL || 'https://combo-worker-api.rajpiyush092.workers.dev';
+                  try {
+                    await fetch(`${workerBase}/api/freelancer/invoices/${selectedInvoice.id}/send`, { method: 'POST' });
+                  } catch (e) {}
+                  navigator.clipboard.writeText(`https://combo-hub.pages.dev/freelancer-os?inv=${selectedInvoice.id}`);
+                  alert(`Invoice link generated & copied to clipboard:\nhttps://combo-hub.pages.dev/freelancer-os?inv=${selectedInvoice.id}`);
+                }}
+                className="px-3 py-1.5 rounded border border-[#dddccd] dark:border-[#31362d] text-[#1c1f1a] dark:text-[#e8eae3] font-semibold text-xs flex items-center space-x-1 hover:bg-[#efeee6] dark:hover:bg-[#1f231d]"
+              >
+                <Send className="w-3.5 h-3.5 mr-1" />
+                <span>Send to Client</span>
+              </button>
               <button
                 onClick={() => window.print()}
                 className="px-4 py-1.5 rounded bg-[#17603a] text-white dark:bg-[#6fce96] dark:text-[#111410] font-semibold text-xs flex items-center space-x-1"

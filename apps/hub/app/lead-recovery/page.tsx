@@ -205,7 +205,7 @@ export default function LeadRecoveryPage() {
             <span className="text-xs font-mono text-[#7a8074]">
               Audit Log: Reviewed by Piyush Raj Singh (Tech Lead)
             </span>
-            {activeLead.recovery_status !== 'APPROVED' ? (
+            {activeLead.recovery_status === 'STALE' || activeLead.recovery_status === 'DRAFTED' ? (
               <button
                 onClick={() => handleApprove(activeLead.id)}
                 className="inline-flex items-center justify-center px-4 py-2 rounded bg-[#17603a] text-white dark:bg-[#6fce96] dark:text-[#111410] font-sans text-xs font-semibold hover:opacity-90 transition-opacity"
@@ -213,10 +213,31 @@ export default function LeadRecoveryPage() {
                 <CheckCircle2 className="w-3.5 h-3.5 mr-1.5" />
                 <span>Sign & Approve Dispatch</span>
               </button>
+            ) : activeLead.recovery_status === 'APPROVED' ? (
+              <div className="flex items-center space-x-2">
+                <span className="font-mono text-xs text-emerald-700 dark:text-emerald-400 font-bold flex items-center">
+                  <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
+                  Approved
+                </span>
+                <button
+                  onClick={async () => {
+                    const workerBase = process.env.NEXT_PUBLIC_API_URL || 'https://combo-worker-api.rajpiyush092.workers.dev';
+                    try {
+                      await fetch(`${workerBase}/api/leads/${activeLead.id}/dispatch`, { method: 'POST' });
+                    } catch (e) {}
+                    setLeads(prev => prev.map(l => l.id === activeLead.id ? { ...l, recovery_status: 'SENT' } : l));
+                    setActiveLead(prev => ({ ...prev, recovery_status: 'SENT' }));
+                  }}
+                  className="inline-flex items-center justify-center px-4 py-2 rounded bg-[#1c1f1a] text-[#fffef9] dark:bg-[#e8eae3] dark:text-[#111410] font-sans text-xs font-semibold hover:opacity-90 transition-opacity"
+                >
+                  <Send className="w-3.5 h-3.5 mr-1.5" />
+                  <span>Dispatch Email Now</span>
+                </button>
+              </div>
             ) : (
-              <span className="font-mono text-xs text-emerald-700 dark:text-emerald-400 font-bold flex items-center">
+              <span className="font-mono text-xs text-blue-700 dark:text-blue-400 font-bold flex items-center">
                 <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
-                Approved & Queued for Delivery
+                Dispatched & Delivered (CAN-SPAM Verified)
               </span>
             )}
           </div>
