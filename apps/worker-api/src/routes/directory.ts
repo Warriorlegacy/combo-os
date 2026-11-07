@@ -8,10 +8,24 @@ directoryRouter.get('/', async (c) => {
   const search = c.req.query('q') || '';
   const db = getDatabase(c.env);
 
-  const { results } = await db
-    .prepare('SELECT * FROM directory_tools')
-    .bind(category, search)
-    .all();
+  let query = 'SELECT * FROM directory_tools WHERE 1=1';
+  const params: unknown[] = [];
+
+  if (category && category !== 'All') {
+    query += ' AND category = ?';
+    params.push(category);
+  }
+
+  if (search) {
+    query += ' AND (name LIKE ? OR description LIKE ? OR use_case LIKE ?)';
+    const searchPattern = `%${search}%`;
+    params.push(searchPattern, searchPattern, searchPattern);
+  }
+
+  query += ' ORDER BY name ASC';
+
+  const stmt = db.prepare(query);
+  const { results } = params.length > 0 ? await stmt.bind(...params).all() : await stmt.all();
 
   return c.json({
     success: true,
@@ -22,7 +36,7 @@ directoryRouter.get('/', async (c) => {
 
 directoryRouter.get('/categories', async (c) => {
   const db = getDatabase(c.env);
-  const { results } = await db.prepare('SELECT * FROM directory_tools').bind('All', '').all();
+  const { results } = await db.prepare('SELECT * FROM directory_tools').all();
   
   const categoryCounts: Record<string, number> = { All: results.length };
   for (const t of results as any[]) {

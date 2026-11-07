@@ -41,7 +41,7 @@ jobs:
         run: |
           if [ -n "$CLOUDFLARE_API_TOKEN" ]; then
             echo "Deploying Static Frontend to Cloudflare Pages..."
-            npx wrangler pages deploy apps/hub/out --project-name=combo-hub --commit-dirty=true
+            npx wrangler pages deploy apps/hub/out --project-name=combo-hub --force --commit-dirty=true
             echo "Deploying Backend Worker API..."
             cd apps/worker-api && npx wrangler deploy
           else

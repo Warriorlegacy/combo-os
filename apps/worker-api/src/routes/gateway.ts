@@ -34,7 +34,7 @@ gatewayRouter.post('/complete', async (c) => {
   // Record telemetry in D1
   const db = getDatabase(c.env);
   await db
-    .prepare('INSERT INTO gateway_logs')
+    .prepare('INSERT INTO gateway_logs (id, provider, model, latency_ms, status) VALUES (?, ?, ?, ?, ?)')
     .bind(response.id, response.provider, response.model, response.latency_ms, response.status)
     .run();
 
@@ -43,6 +43,6 @@ gatewayRouter.post('/complete', async (c) => {
 
 gatewayRouter.get('/telemetry', async (c) => {
   const db = getDatabase(c.env);
-  const { results } = await db.prepare('SELECT * FROM gateway_logs').bind().all();
+  const { results } = await db.prepare('SELECT * FROM gateway_logs ORDER BY created_at DESC LIMIT 50').all();
   return c.json({ success: true, count: results.length, logs: results });
 });

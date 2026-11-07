@@ -7,7 +7,7 @@ export const ragRouter = new Hono<{ Bindings: { COMBO_DB?: any } }>();
 // 1. List Documents
 ragRouter.get('/docs', async (c) => {
   const db = getDatabase(c.env);
-  const { results } = await db.prepare('SELECT * FROM rag_documents').bind().all();
+  const { results } = await db.prepare('SELECT * FROM rag_documents').all();
   return c.json({ success: true, count: results.length, documents: results });
 });
 
@@ -22,7 +22,7 @@ ragRouter.post('/query', async (c) => {
 
   const startTime = Date.now();
   const db = getDatabase(c.env);
-  const { results } = await db.prepare('SELECT * FROM rag_documents').bind().all();
+  const { results } = await db.prepare('SELECT * FROM rag_documents').all();
   const docs = results as RAGDocument[];
 
   // Semantic similarity scoring via keyword-density and overlap
@@ -92,7 +92,7 @@ ragRouter.post('/query', async (c) => {
 // 3. Live Eval Benchmark Dashboard Endpoint
 ragRouter.get('/eval', async (c) => {
   const db = getDatabase(c.env);
-  const { results } = await db.prepare('SELECT * FROM rag_eval_benchmarks').bind().all();
+  const { results } = await db.prepare('SELECT * FROM rag_eval_benchmarks').all();
   const benchmarks = results as RAGEvalBenchmark[];
 
   // Calculate live aggregate evaluation metrics

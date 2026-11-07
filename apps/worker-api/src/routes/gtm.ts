@@ -7,7 +7,7 @@ export const gtmRouter = new Hono<{ Bindings: { COMBO_DB?: any } }>();
 // 1. Topics
 gtmRouter.get('/topics', async (c) => {
   const db = getDatabase(c.env);
-  const { results } = await db.prepare('SELECT * FROM gtm_topics').bind().all();
+  const { results } = await db.prepare('SELECT * FROM gtm_topics').all();
   return c.json({ success: true, topics: results });
 });
 
@@ -41,7 +41,9 @@ gtmRouter.post('/topics', async (c) => {
 gtmRouter.get('/drafts', async (c) => {
   const status = c.req.query('status') as ApprovalStatus | undefined;
   const db = getDatabase(c.env);
-  const { results } = await db.prepare('SELECT * FROM gtm_drafts').bind(status).all();
+  const { results } = status
+    ? await db.prepare('SELECT * FROM gtm_drafts WHERE approval_status = ?').bind(status).all()
+    : await db.prepare('SELECT * FROM gtm_drafts').all();
   return c.json({ success: true, drafts: results });
 });
 
@@ -67,7 +69,7 @@ gtmRouter.post('/drafts', async (c) => {
   };
 
   await db
-    .prepare('INSERT INTO gtm_drafts')
+    .prepare('INSERT INTO gtm_drafts (id, topic_id, channel, content, citations, approval_status) VALUES (?, ?, ?, ?, ?, ?)')
     .bind(newDraft.id, newDraft.topic_id, newDraft.channel, newDraft.content, JSON.stringify(newDraft.citations), newDraft.approval_status)
     .run();
 

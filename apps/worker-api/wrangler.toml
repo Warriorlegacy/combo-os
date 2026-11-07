@@ -7,13 +7,13 @@ compatibility_flags = ["nodejs_compat"]
 [[d1_databases]]
 binding = "COMBO_DB"
 database_name = "combo-production-db"
-database_id = "combo-d1-prod-001"
+database_id = "8fa9bb12-1be9-4776-afbc-c7c1da0a9114"
 migrations_dir = "src/db"
 
-# Cloudflare R2 Storage Binding
-[[r2_buckets]]
-binding = "COMBO_BUCKET"
-bucket_name = "combo-production-storage"
+# Cloudflare R2 Storage Binding (Enable after turning on R2 in Cloudflare dashboard)
+# [[r2_buckets]]
+# binding = "COMBO_BUCKET"
+# bucket_name = "combo-production-storage"
 
 # Cloudflare Workers AI Binding
 [ai]
