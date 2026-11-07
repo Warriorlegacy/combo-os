@@ -39,3 +39,4 @@ for (const ev of seedEvalBenchmarks) {
 const outPath = path.resolve('apps/worker-api/src/db/seed.sql');
 fs.writeFileSync(outPath, sql, 'utf-8');
 console.log(`✓ Generated ${outPath} successfully with complete dataset.`);
+
