@@ -40,3 +40,4 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           echo "Ready for zero-dollar edge deployment via wrangler deploy"
+

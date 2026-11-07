@@ -119,3 +119,145 @@ export interface SystemStatus {
     eval_refusal_accuracy_pct: number;
   };
 }
+
+// --- Project #3: WhatsApp AI Sales & Support Agent ---
+export interface WhatsAppConversation {
+  id: string;
+  phone_number: string;
+  sender_name: string;
+  last_message: string;
+  status: 'ACTIVE' | 'QUALIFIED' | 'HANDOFF' | 'BOOKED';
+  office_hours_only: boolean;
+  updated_at: string;
+}
+
+export interface WhatsAppLead {
+  id: string;
+  conversation_id: string;
+  name: string;
+  phone: string;
+  service_requested: string;
+  budget: string;
+  preferred_time: string;
+  status: 'NEW' | 'CONTACTED' | 'CONVERTED';
+  created_at: string;
+}
+
+// --- Project #4: 3D Product Configurator / Virtual Showroom ---
+export interface ShowroomFinish {
+  id: string;
+  name: string;
+  colorHex: string;
+  roughness: number;
+  metalness: number;
+  priceDelta: number;
+}
+
+export interface ShowroomProduct {
+  id: string;
+  name: string;
+  basePrice: number;
+  description: string;
+  finishes: ShowroomFinish[];
+  dimensions: { width: string; height: string; depth: string };
+  features: string[];
+}
+
+export interface ShowroomEnquiry {
+  id: string;
+  product_id: string;
+  variant_finish: string;
+  calculated_price: number;
+  customer_name: string;
+  customer_email: string;
+  notes?: string;
+  created_at: string;
+}
+
+// --- Project #5: AI Lead Recovery & Outreach Agent ---
+export type RecoveryStatus = 'STALE' | 'DRAFTED' | 'APPROVED' | 'SENT' | 'REVIVED';
+
+export interface DeadLead {
+  id: string;
+  company_name: string;
+  contact_name: string;
+  email: string;
+  days_inactive: number;
+  intent_score: number;
+  recovery_status: RecoveryStatus;
+  drafted_followup?: string;
+  created_at: string;
+}
+
+// --- Project #6: JobAutopilot Pro ---
+export type ApplicationStatus = 'BOOKMARKED' | 'APPLIED' | 'INTERVIEW' | 'OFFER' | 'REJECTED';
+
+export interface JobApplication {
+  id: string;
+  role_title: string;
+  company: string;
+  match_score: number;
+  status: ApplicationStatus;
+  tailored_resume_bullets: string[];
+  salary_range: string;
+  created_at: string;
+}
+
+// --- Project #7: Faceless Shorts / Reels Factory ---
+export interface VideoShort {
+  id: string;
+  topic: string;
+  hook: string;
+  script_body: string;
+  call_to_action: string;
+  duration_seconds: number;
+  status: 'DRAFT' | 'AUDIO_READY' | 'RENDERED';
+  created_at: string;
+}
+
+// --- Project #8: AI Meeting-to-CRM Copilot ---
+export interface ActionItem {
+  id: string;
+  task: string;
+  assignee: string;
+  due_date: string;
+  completed: boolean;
+}
+
+export interface MeetingNote {
+  id: string;
+  title: string;
+  date: string;
+  attendees: string[];
+  summary: string;
+  decisions: string[];
+  action_items: ActionItem[];
+  crm_synced: boolean;
+  created_at: string;
+}
+
+// --- Project #9: Freelancer Client OS ---
+export interface FreelancerInvoice {
+  id: string;
+  client_name: string;
+  project_title: string;
+  amount_cents: number;
+  currency: string;
+  status: 'DRAFT' | 'SENT' | 'PAID';
+  due_date: string;
+  created_at: string;
+}
+
+// --- Project #10: AI Interview Prep Coach ---
+export interface InterviewSession {
+  id: string;
+  role_target: string;
+  question: string;
+  user_answer_transcript: string;
+  score_communication: number;
+  score_technical: number;
+  score_star_structure: number;
+  specific_feedback: string;
+  created_at: string;
+}
+

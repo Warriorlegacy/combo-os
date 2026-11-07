@@ -53,3 +53,4 @@ export const unslopBadges = {
   approvalApproved: 'bg-emerald-100 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-400 font-mono text-xs px-2.5 py-1 rounded-md font-semibold',
   approvalRejected: 'bg-rose-100 text-rose-900 dark:bg-rose-950 dark:text-rose-300 border border-rose-300 font-mono text-xs px-2.5 py-1 rounded-md font-semibold'
 } as const;
+
