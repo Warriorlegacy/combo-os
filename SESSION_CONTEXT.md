@@ -80,3 +80,22 @@ node scripts/seed-d1.mjs
 3. **Truth in Career Artifacts**: The resume bullet rewriter must never invent experience. It rewrites existing projects in the vocabulary of the job post; it does not fabricate technologies or metrics not in the user's profile.
 4. **Zero Egress Cloud Cost**: Files, exports, and assets must be hosted on Cloudflare Pages or Cloudflare R2 ($0 egress fees), never on AWS S3 or egress-metered providers.
 5. **Multi-Model Edge Fallback**: The AI Gateway automatically queries local FreeLLMAPI first, falling back to Groq, Gemini, or Cloudflare Workers AI with sub-50ms latency.
+
+---
+
+## 6. Live Production Deployment Status
+
+- **Cloudflare Account ID**: `2bffaa0aa7218f8bcd590a12e9ba5c7e` (`Rajpiyush092@gmail.com's Account`)
+- **Cloudflare API Token**: Validated & active (configured in local `.env` and GitHub Secrets)
+- **Frontend (Cloudflare Pages)**: `https://combo-hub.pages.dev` (16 static routes, unlimited bandwidth)
+- **Backend (Cloudflare Workers)**: `https://combo-worker-api.rajpiyush092.workers.dev` (Edge V8 isolate)
+- **Database (Cloudflare D1)**: `combo-production-db` (ID: `8fa9bb12-1be9-4776-afbc-c7c1da0a9114`, Region APAC)
+  - 15 production SQLite tables migrated via `src/db/schema.sql`
+  - Pre-seeded with 48 curated tools from Tabworthy & free-for-dev via `src/db/seed.sql`
+- **Cloudflare Agent Setup**:
+  - 22 official Cloudflare Skills installed globally via `cloudflare/skills`
+  - Cloudflare MCP server configured in `.vscode/mcp.json` and `.cursor/mcp.json` (`https://mcp.cloudflare.com/mcp`)
+- **GitHub Actions Auto-Deployment**:
+  - `CLOUDFLARE_API_TOKEN` & `CLOUDFLARE_ACCOUNT_ID` stored in repo secrets on `Warriorlegacy/combo-os`.
+  - Every push to `master` automatically runs tests, builds static assets, and deploys to Pages & Workers.
+
