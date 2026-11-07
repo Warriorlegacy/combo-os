@@ -19,6 +19,10 @@ migrations_dir = "src/db"
 [ai]
 binding = "AI"
 
+# Scheduled Cron Trigger (Executes daily at 09:00 UTC Mon-Fri on free tier)
+[triggers]
+crons = ["0 9 * * 1-5"]
+
 [vars]
 ENVIRONMENT = "production"
 DEFAULT_MODEL = "@cf/meta/llama-3.3-70b-instruct"
