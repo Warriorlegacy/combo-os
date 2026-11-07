@@ -39,3 +39,4 @@ shortsRouter.post('/', async (c) => {
   mockShorts.unshift(newShort);
   return c.json({ success: true, short: newShort }, 201);
 });
+

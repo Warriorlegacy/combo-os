@@ -46,3 +46,4 @@ jobsRouter.post('/:id/status', async (c) => {
   job.status = body.status as ApplicationStatus;
   return c.json({ success: true, job });
 });
+

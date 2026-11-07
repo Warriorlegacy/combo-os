@@ -49,3 +49,4 @@ meetingsRouter.post('/extract', async (c) => {
   mockMeetings.unshift(extracted);
   return c.json({ success: true, meeting: extracted });
 });
+

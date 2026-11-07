@@ -45,3 +45,4 @@ freelancerRouter.post('/invoices', async (c) => {
   mockInvoices.unshift(newInvoice);
   return c.json({ success: true, invoice: newInvoice }, 201);
 });
+

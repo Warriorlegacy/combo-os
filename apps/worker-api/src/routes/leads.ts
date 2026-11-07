@@ -41,3 +41,4 @@ leadsRouter.post('/:id/approve', (c) => {
   lead.recovery_status = 'APPROVED';
   return c.json({ success: true, lead, message: 'Lead outreach approved for dispatch.' });
 });
+

@@ -97,3 +97,4 @@ whatsappRouter.get('/conversations', (c) => {
 whatsappRouter.get('/leads', (c) => {
   return c.json({ success: true, count: mockLeads.length, leads: mockLeads });
 });
+
