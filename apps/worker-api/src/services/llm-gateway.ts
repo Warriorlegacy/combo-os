@@ -110,17 +110,21 @@ export class LLMGatewayService {
         });
         if (groqRes.ok) {
           const data: any = await groqRes.json();
-          const latency = Date.now() - startTime;
-          return {
-            id: `groq-${Date.now()}`,
-            provider: 'groq',
-            model: 'llama-3.3-70b-versatile',
-            content: data.choices?.[0]?.message?.content || '',
-            prompt_tokens: data.usage?.prompt_tokens || Math.ceil(prompt.length / 4),
-            completion_tokens: data.usage?.completion_tokens || 100,
-            latency_ms: latency,
-            status: 'fallback_success'
-          };
+          const content = data.choices?.[0]?.message?.content || '';
+          if (content) {
+            const latency = Date.now() - startTime;
+            return {
+              id: `groq-${Date.now()}`,
+              provider: 'groq',
+              model: 'llama-3.3-70b-versatile',
+              content,
+              prompt_tokens: data.usage?.prompt_tokens || Math.ceil(prompt.length / 4),
+              completion_tokens: data.usage?.completion_tokens || 100,
+              latency_ms: latency,
+              status: 'fallback_success'
+            };
+          }
+          console.warn('Groq returned empty content, attempting Gemini.');
         }
       } catch (err: any) {
         console.warn('Groq call failed, attempting Gemini:', err?.message);
@@ -146,17 +150,21 @@ export class LLMGatewayService {
         });
         if (geminiRes.ok) {
           const data: any = await geminiRes.json();
-          const latency = Date.now() - startTime;
-          return {
-            id: `gemini-${Date.now()}`,
-            provider: 'gemini',
-            model: 'gemini-2.5-flash',
-            content: data.choices?.[0]?.message?.content || '',
-            prompt_tokens: data.usage?.prompt_tokens || Math.ceil(prompt.length / 4),
-            completion_tokens: data.usage?.completion_tokens || 100,
-            latency_ms: latency,
-            status: 'fallback_success'
-          };
+          const content = data.choices?.[0]?.message?.content || '';
+          if (content) {
+            const latency = Date.now() - startTime;
+            return {
+              id: `gemini-${Date.now()}`,
+              provider: 'gemini',
+              model: 'gemini-2.5-flash',
+              content,
+              prompt_tokens: data.usage?.prompt_tokens || Math.ceil(prompt.length / 4),
+              completion_tokens: data.usage?.completion_tokens || 100,
+              latency_ms: latency,
+              status: 'fallback_success'
+            };
+          }
+          console.warn('Gemini returned empty content, attempting OpenRouter.');
         }
       } catch (err: any) {
         console.warn('Gemini call failed, attempting OpenRouter:', err?.message);
@@ -182,17 +190,21 @@ export class LLMGatewayService {
         });
         if (orRes.ok) {
           const data: any = await orRes.json();
-          const latency = Date.now() - startTime;
-          return {
-            id: `openrouter-${Date.now()}`,
-            provider: 'groq',
-            model: 'llama-3.3-70b (openrouter)',
-            content: data.choices?.[0]?.message?.content || '',
-            prompt_tokens: data.usage?.prompt_tokens || Math.ceil(prompt.length / 4),
-            completion_tokens: data.usage?.completion_tokens || 100,
-            latency_ms: latency,
-            status: 'fallback_success'
-          };
+          const content = data.choices?.[0]?.message?.content || '';
+          if (content) {
+            const latency = Date.now() - startTime;
+            return {
+              id: `openrouter-${Date.now()}`,
+              provider: 'groq',
+              model: 'llama-3.3-70b (openrouter)',
+              content,
+              prompt_tokens: data.usage?.prompt_tokens || Math.ceil(prompt.length / 4),
+              completion_tokens: data.usage?.completion_tokens || 100,
+              latency_ms: latency,
+              status: 'fallback_success'
+            };
+          }
+          console.warn('OpenRouter returned empty content, using edge simulation engine.');
         }
       } catch (err: any) {
         console.warn('OpenRouter call failed, using edge simulation engine:', err?.message);
