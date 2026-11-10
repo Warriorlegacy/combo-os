@@ -1,0 +1,17 @@
+{
+  "name": "Combo OS — $0 Free-Stack AI Suite",
+  "short_name": "Combo OS",
+  "description": "Production-ready zero-cloud-bill SaaS & AI automation suite.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f6f1",
+  "theme_color": "#17603a",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "128x128 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

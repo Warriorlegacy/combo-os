@@ -30,7 +30,8 @@ export function Nav() {
   const mainNavItems = [
     { label: 'Overview', href: '/' },
     { label: 'Free Stack Directory', href: '/directory' },
-    { label: 'Multi-Model AI', href: '/models' }
+    { label: 'Multi-Model AI', href: '/models' },
+    { label: 'ROI & Pricing', href: '/pricing' }
   ];
 
   const projects = [

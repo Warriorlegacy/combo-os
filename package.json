@@ -1,6 +1,6 @@
 {
   "name": "combo-os",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "Unified Cloudflare Free-Stack Hub, Developer Directory, and AI Production Suite",
   "workspaces": [
@@ -13,6 +13,11 @@
     "build:hub": "npm --workspace=apps/hub run build",
     "build:api": "npm --workspace=apps/worker-api run build",
     "build": "node scripts/build-all.mjs",
+    "verify": "npm run build:api && node scripts/test-edge.mjs && npm run build:hub",
+    "deploy:worker": "npm --workspace=apps/worker-api run deploy",
+    "deploy:pages": "npx wrangler pages deploy apps/hub/out --project-name=combo-hub --force --commit-dirty=true",
+    "deploy": "npm run deploy:worker && npm run deploy:pages",
+    "verify:live": "node scripts/test-production-live.mjs",
     "test:edge": "node scripts/test-edge.mjs",
     "test": "npm run test:edge"
   },

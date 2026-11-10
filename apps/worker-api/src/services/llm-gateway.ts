@@ -127,6 +127,78 @@ export class LLMGatewayService {
       }
     }
 
+    // 3b. Attempt Google Gemini (OpenAI-compatible endpoint) if API key is provided
+    const geminiKey = this.env?.GEMINI_API_KEY || process.env.GEMINI_API_KEY || process.env.GOOGLE_KEY;
+    if (geminiKey) {
+      try {
+        const geminiRes = await fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${geminiKey}`
+          },
+          body: JSON.stringify({
+            model: 'gemini-2.5-flash',
+            messages: req.messages,
+            temperature: req.temperature || 0.7,
+            max_tokens: req.max_tokens || 1024
+          })
+        });
+        if (geminiRes.ok) {
+          const data: any = await geminiRes.json();
+          const latency = Date.now() - startTime;
+          return {
+            id: `gemini-${Date.now()}`,
+            provider: 'gemini',
+            model: 'gemini-2.5-flash',
+            content: data.choices?.[0]?.message?.content || '',
+            prompt_tokens: data.usage?.prompt_tokens || Math.ceil(prompt.length / 4),
+            completion_tokens: data.usage?.completion_tokens || 100,
+            latency_ms: latency,
+            status: 'fallback_success'
+          };
+        }
+      } catch (err: any) {
+        console.warn('Gemini call failed, attempting OpenRouter:', err?.message);
+      }
+    }
+
+    // 3c. Attempt OpenRouter free-tier models if API key is provided
+    const openRouterKey = this.env?.OPENROUTER_KEY || process.env.OPENROUTER_KEY;
+    if (openRouterKey) {
+      try {
+        const orRes = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${openRouterKey}`
+          },
+          body: JSON.stringify({
+            model: 'meta-llama/llama-3.3-70b-instruct:free',
+            messages: req.messages,
+            temperature: req.temperature || 0.7,
+            max_tokens: req.max_tokens || 1024
+          })
+        });
+        if (orRes.ok) {
+          const data: any = await orRes.json();
+          const latency = Date.now() - startTime;
+          return {
+            id: `openrouter-${Date.now()}`,
+            provider: 'groq',
+            model: 'llama-3.3-70b (openrouter)',
+            content: data.choices?.[0]?.message?.content || '',
+            prompt_tokens: data.usage?.prompt_tokens || Math.ceil(prompt.length / 4),
+            completion_tokens: data.usage?.completion_tokens || 100,
+            latency_ms: latency,
+            status: 'fallback_success'
+          };
+        }
+      } catch (err: any) {
+        console.warn('OpenRouter call failed, using edge simulation engine:', err?.message);
+      }
+    }
+
     // 4. Fallback / Edge Simulation Engine (Guarantees $0 operation and 100% test reliability)
     const latency = Date.now() - startTime + 42; // simulated edge latency ~40-60ms
     const userMsg = req.messages.find(m => m.role === 'user')?.content || '';

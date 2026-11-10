@@ -1,0 +1,16 @@
+# Combo OS — Cloudflare Pages production headers
+# Security baseline for all routes
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: interest-cohort=()
+  X-Robots-Tag: index, follow
+
+# Immutable hashed assets — cache at edge + browser for 1 year
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Static export HTML — revalidate quickly, cache briefly at edge
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate

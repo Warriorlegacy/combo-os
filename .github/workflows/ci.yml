@@ -27,6 +27,9 @@ jobs:
       - name: Run Edge Invariant & API Tests (73 Checks)
         run: node --experimental-strip-types scripts/test-edge.mjs
 
+      - name: Typecheck Worker API (tsc)
+        run: npm --workspace=apps/worker-api run build
+
       - name: Build Cloudflare Pages Static Export
         run: npm --workspace=apps/hub run build
 

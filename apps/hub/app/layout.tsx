@@ -2,9 +2,19 @@ import './globals.css';
 import { Nav } from '../components/Nav';
 import type { Metadata } from 'next';
 
+import type { Metadata, Viewport } from 'next';
 export const metadata: Metadata = {
   title: 'Combo OS — Free Website Infrastructure Stack & AI Production Suite',
   description: 'Production-ready free stack platform powered by Cloudflare Pages, Workers, D1, R2, and free multi-model AI inference.',
+  manifest: '/manifest.json',
+  icons: {
+    icon: '/icon.svg',
+    apple: '/icon.svg',
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#17603a',
 };
 
 export default function RootLayout({
